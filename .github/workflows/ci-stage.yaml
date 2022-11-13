@@ -1,16 +1,11 @@
 name: 'Infra - Stage'
 
 on:
-  push:
-    # branches:
-    # - main
-    tags:
-    - stage-*
   pull_request:
     # branches:
     # - main
     tags:
-    - stage-*
+    - stage
 
 permissions:
   contents: read
