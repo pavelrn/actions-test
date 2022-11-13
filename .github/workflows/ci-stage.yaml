@@ -1,17 +1,16 @@
 name: 'Infra - Stage'
-run-name: Deploy to ${{ inputs.deploy_target }} by @${{ github.actor }}
 
 on:
   push:
     # branches:
     # - main
     tags:
-    - stage
+    - stage-*
   pull_request:
     # branches:
     # - main
     tags:
-    - stage
+    - stage-*
 
 permissions:
   contents: read
