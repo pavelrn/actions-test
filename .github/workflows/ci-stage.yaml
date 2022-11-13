@@ -1,7 +1,7 @@
 name: 'Infra - Stage'
 
 on:
-  pull_request:
+  push:
     tags:
     - stage
 
