@@ -18,6 +18,10 @@ jobs:
     name: Terraform
     environment: staging
     steps:
+    
+    - name: Checkout Repo
+      uses: actions/checkout@v1
+    
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v2
       with:
