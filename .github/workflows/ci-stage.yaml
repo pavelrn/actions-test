@@ -1,0 +1,113 @@
+name: 'Infra - Stage'
+run-name: Deploy to ${{ inputs.deploy_target }} by @${{ github.actor }}
+
+on:
+  push:
+    # branches:
+    # - main
+    tags:
+    - stage
+  pull_request:
+    # branches:
+    # - main
+    tags:
+    - stage
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    name: Terraform
+    environment: staging
+    steps:
+
+    - name: Checkout Repo
+      uses: actions/checkout@v1
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_version: 1.1.9
+        terraform_wrapper: false
+
+    - name: Terraform Init
+      id: init
+      run: terraform init
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      working-directory: ./
+      shell: bash
+
+    - name: Terraform Plan
+      id: plan
+      run: |
+        terraform plan -input=false -no-color -out tf.plan
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      working-directory: ./
+      shell: bash
+
+    - name: Terraform Show
+      id: show
+      run: terraform show -no-color tf.plan 2>&1 > /tmp/plan.txt
+      working-directory: ./
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      shell: bash
+
+    # .github/workflows/staging.yaml
+    - uses: actions/github-script@v6
+      if: github.event_name == 'pull_request'
+      with:
+        script: |
+          const fs = require("fs");
+          const plan = fs.readFileSync("/tmp/plan.txt", "utf8");
+          const maxGitHubBodyCharacters = 65536;
+
+          function chunkSubstr(str, size) {
+            const numChunks = Math.ceil(str.length / size)
+            const chunks = new Array(numChunks)
+            for (let i = 0, o = 0; i < numChunks; ++i, o += size) {
+              chunks[i] = str.substr(o, size)
+            }
+            return chunks
+          }
+
+          // Split the Terraform plan into chunks if it's too big and can't fit into the GitHub Action
+          var plans = chunkSubstr(plan, maxGitHubBodyCharacters);
+          for (let i = 0; i < plans.length; i++) {
+            const output = `### ${{ inputs.plan-title }} Part # ${i + 1}
+            #### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
+            #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
+            #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+            <details><summary>Show Plan</summary>
+
+            \`\`\`\n
+            ${plans[i]}
+            \`\`\`
+            </details>
+
+            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ inputs.working-directory }}\`, Workflow: \`${{ github.workflow }}\`*`;
+
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
+          }
+
+    - name: Terraform Apply
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      run: terraform apply -input=false tf.plan
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      working-directory: ./
+      shell: bash
