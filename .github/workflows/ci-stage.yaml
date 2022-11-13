@@ -3,13 +3,13 @@ run-name: Deploy to ${{ inputs.deploy_target }} by @${{ github.actor }}
 
 on:
   push:
-    branches:
-    - main
+    # branches:
+    # - main
     tags:
     - stage
   pull_request:
-    branches:
-    - main
+    # branches:
+    # - main
     tags:
     - stage
 
