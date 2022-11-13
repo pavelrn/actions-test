@@ -1,9 +1,7 @@
 name: 'Infra - Stage'
 
 on:
-  pull_request:
-    # branches:
-    # - main
+  release:
     tags:
     - stage
 
