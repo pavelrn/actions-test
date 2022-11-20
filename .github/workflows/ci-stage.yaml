@@ -1,7 +1,11 @@
 name: 'Infra - Stage'
 
 on:
+<<<<<<< HEAD
   release:
+=======
+  push:
+>>>>>>> 3507fe85ee4f3fe81591a11cb73330b1f3d6f0eb
     tags:
     - stage
 
