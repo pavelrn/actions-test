@@ -4,9 +4,17 @@ on:
   push:
     branches:
     - stage
+    path:
+    - 'terraform/*'
+    - '.github/workflows/ci-dev.yml'
+    
   pull_request:
     branches:
     - stage
+    path:
+    - 'terraform/*'
+    - '.github/workflows/ci-dev.yml'
+
 
 permissions:
   contents: read
