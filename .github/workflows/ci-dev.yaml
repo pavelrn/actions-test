@@ -25,3 +25,4 @@ jobs:
     with:
       env: dev
     secrets: inherit
+    environment: dev
