@@ -7,11 +7,11 @@ on:
         description: 'Environment (dev, stage or prod)'
         type: string
         required: true
-    secrets:
-      AWS_ACCESS_KEY_ID:
-        required: true
-      AWS_SECRET_ACCESS_KEY:
-        required: true
+    # secrets:
+    #   AWS_ACCESS_KEY_ID:
+    #     required: true
+    #   AWS_SECRET_ACCESS_KEY:
+    #     required: true
 
 permissions:
   contents: read
@@ -35,10 +35,7 @@ jobs:
 
     - name: Terraform Init
       id: init
-      run: |
-        echo $AWS_ACCESS_KEY_ID
-        echo $AWS_SECRET_ACCESS_KEY
-        terraform init
+      run: terraform init
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
