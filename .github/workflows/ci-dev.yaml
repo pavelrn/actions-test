@@ -21,7 +21,7 @@ on:
 
 jobs:
   terraform:
-    name: "Deploy Dev environment"
+    name: "Dev env deploy"
     uses: "./.github/workflows/terraform_deploy.yaml"
     with:
       env: dev
