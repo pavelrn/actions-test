@@ -3,14 +3,14 @@ name: 'Infra - Stage'
 on:
   push:
     branches:
-    - stage
+    - main
     path:
     - 'terraform/*'
     - '.github/workflows/ci-dev.yml'
 
   pull_request:
     branches:
-    - stage
+    - main
     path:
     - 'terraform/*'
     - '.github/workflows/ci-dev.yml'
