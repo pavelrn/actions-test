@@ -7,13 +7,13 @@ on:
         description: 'Environment (dev, stage or prod)'
         type: string
         required: true
-      # secrets:
-      #   AWS_ACCESS_KEY_ID:
-      #     type: string
-      #     required: true
-      #   AWS_SECRET_ACCESS_KEY:
-      #     type: string
-      #     required: true
+      secrets:
+        AWS_ACCESS_KEY_ID:
+          type: string
+          required: true
+        AWS_SECRET_ACCESS_KEY:
+          type: string
+          required: true
 
 permissions:
   contents: read
