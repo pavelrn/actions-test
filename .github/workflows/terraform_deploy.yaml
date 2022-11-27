@@ -27,6 +27,12 @@ jobs:
     - name: Checkout Repo
       uses: actions/checkout@v1
 
+    - name: Debug:
+      run: |
+        echo github.ref=${{ github.ref }}
+        echo github.event_name=${{ github.event_name }}
+      shell: bash
+
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v2
       with:
