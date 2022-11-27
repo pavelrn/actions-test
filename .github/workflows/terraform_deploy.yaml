@@ -1,20 +1,12 @@
 name: 'Terraform Deploy'
 
 on:
-  push:
-    branches:
-    - ${{ branch }}
-    path:
-    - 'terraform/*'
-    - '.github/workflows/ci-${{ env }}.yml'
-
-  pull_request:
-    branches:
-    - ${{ branch }}
-    path:
-    - 'terraform/*'
-    - '.github/workflows/ci-${{ env }}.yml'
-
+  workflow_call:
+    inputs:
+      env:
+        description: 'Environment (dev, stage or prod)'
+        type: string
+        required: true
 
 permissions:
   contents: read
