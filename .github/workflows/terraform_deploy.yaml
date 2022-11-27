@@ -27,7 +27,7 @@ jobs:
     - name: Checkout Repo
       uses: actions/checkout@v1
 
-    - name: Debug:
+    - name: Debug
       run: |
         echo github.ref=${{ github.ref }}
         echo github.event_name=${{ github.event_name }}
