@@ -105,7 +105,7 @@ jobs:
           }
 
     - name: Terraform Apply
-      if: github.ref == 'refs/heads/${{ env }}' && github.event_name == 'push'
+      if: github.ref == 'refs/heads/${{ inputs.env }}' && github.event_name == 'push'
       run: terraform apply -input=false tf.plan
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
