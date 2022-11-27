@@ -21,7 +21,7 @@ jobs:
   terraform:
     runs-on: ubuntu-latest
     name: Terraform
-    environment: production
+    environment: prod
     steps:
 
     - name: Checkout Repo
