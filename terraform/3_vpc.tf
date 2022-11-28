@@ -6,6 +6,6 @@ resource "aws_vpc" "main" {
 
   tags = {
     "Managed-by" = "Terraform"
-    "Name"       = "test-vpc6"
+    "Name"       = "test-vpc7"
   }
 }
