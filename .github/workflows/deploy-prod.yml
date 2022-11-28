@@ -3,12 +3,11 @@ name: Deploy to production
 on:
   workflow_dispatch:
     inputs:
-      name:
 
 jobs:
   terraform:
     name: "Prod deploy"
-    uses: "./.github/workflows/terraform_deploy.yaml"
+    uses: "./.github/workflows/terraform-deploy.yaml"
     with:
       env: prod
     secrets: inherit
